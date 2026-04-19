@@ -1,0 +1,68 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+#define MAXN 100000
+
+struct List {
+    int num;
+    int de;
+    int cai;
+} list[MAXN];
+
+int list1[MAXN], l1 = 0;
+int list2[MAXN], l2 = 0;
+int list3[MAXN], l3 = 0;
+int list4[MAXN], l4 = 0;
+
+// 比较函数，用于 qsort
+int cmp(const void *a, const void *b) {
+    int idx1 = *(int*)a;
+    int idx2 = *(int*)b;
+    int sum1 = list[idx1].de + list[idx1].cai;
+    int sum2 = list[idx2].de + list[idx2].cai;
+
+    if (sum1 != sum2)
+        return sum2 - sum1;  // 总分降序
+    if (list[idx1].de != list[idx2].de)
+        return list[idx2].de - list[idx1].de;  // 德分降序
+    return list[idx1].num - list[idx2].num;  // 准考证号升序
+}
+
+int main() {
+    int n, l, h;
+    scanf("%d %d %d", &n, &l, &h);
+
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        scanf("%d %d %d", &list[i].num, &list[i].de, &list[i].cai);
+        if (list[i].de >= l && list[i].cai >= l) {
+            if (list[i].de >= h && list[i].cai >= h)
+                list1[l1++] = i;
+            else if (list[i].de >= h)
+                list2[l2++] = i;
+            else if (list[i].de >= list[i].cai)
+                list3[l3++] = i;
+            else
+                list4[l4++] = i;
+            k++;
+        }
+    }
+
+    // 使用 qsort 排序
+    if (l1) qsort(list1, l1, sizeof(int), cmp);
+    if (l2) qsort(list2, l2, sizeof(int), cmp);
+    if (l3) qsort(list3, l3, sizeof(int), cmp);
+    if (l4) qsort(list4, l4, sizeof(int), cmp);
+
+    printf("%d\n", k);
+    for (int i = 0; i < l1; i++)
+        printf("%d %d %d\n", list[list1[i]].num, list[list1[i]].de, list[list1[i]].cai);
+    for (int i = 0; i < l2; i++)
+        printf("%d %d %d\n", list[list2[i]].num, list[list2[i]].de, list[list2[i]].cai);
+    for (int i = 0; i < l3; i++)
+        printf("%d %d %d\n", list[list3[i]].num, list[list3[i]].de, list[list3[i]].cai);
+    for (int i = 0; i < l4; i++)
+        printf("%d %d %d\n", list[list4[i]].num, list[list4[i]].de, list[list4[i]].cai);
+
+    return 0;
+}
