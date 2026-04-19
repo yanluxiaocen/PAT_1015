@@ -1,0 +1,84 @@
+#include<stdio.h>
+
+struct List
+{
+	int num;
+	int de;
+	int cai;
+};
+
+void bub(int ln, struct List list[], int listn[]) {
+	for (int i = 0; i < ln; i++)
+	{
+		int temp;
+		for (int j = 0; j < ln - i - 1; j++)
+		{
+			if ((list[listn[j]].cai + list[listn[j]].de) < (list[listn[j + 1]].cai + list[listn[j + 1]].de))
+			{
+				temp = listn[j + 1];
+				listn[j + 1] = listn[j];
+				listn[j] = temp;
+			}
+			else if ((list[listn[j]].cai + list[listn[j]].de) == (list[listn[j + 1]].cai + list[listn[j + 1]].de)) {
+				if (list[listn[j]].de < list[listn[j + 1]].de) {
+					temp = listn[j + 1];
+					listn[j + 1] = listn[j];
+					listn[j] = temp;
+				}
+				else if (list[listn[j]].de == list[listn[j + 1]].de)
+					if (list[listn[j]].num > list[listn[j + 1]].num){
+						temp = listn[j + 1];
+						listn[j + 1] = listn[j];
+						listn[j] = temp;
+					}
+			}
+
+		}
+	}
+}
+
+int main() {
+	int n, l, h;
+	scanf("%d %d %d", &n, &l, &h);
+
+	int k = 0;
+	struct List list[100000];
+	int list1[100000], l1 = 0;
+	int list2[100000], l2 = 0;
+	int list3[100000], l3 = 0;
+	int list4[100000], l4 = 0;
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%d %d %d", &list[i].num, &list[i].de, &list[i].cai);
+		if (list[i].de >= l && list[i].cai >= l) {
+			if (list[i].de >= h && list[i].cai >= h)
+				list1[l1++] = i;
+			else if (list[i].de >= h)
+				list2[l2++] = i;
+			else if (list[i].de >= list[i].cai)
+				list3[l3++] = i;
+			else list4[l4++] = i;
+			k++;
+		}
+	}
+
+	if (l1 != 0) bub(l1, list, list1);
+	if (l2 != 0) bub(l2, list, list2);
+	if (l3 != 0) bub(l3, list, list3);
+	if (l4 != 0) bub(l4, list, list4);
+
+	printf("%d\n", k);
+	if (l1 != 0)
+		for (int i = 0; i < l1; i++)
+			printf("%d %d %d\n", list[list1[i]].num, list[list1[i]].de, list[list1[i]].cai);
+	if (l2 != 0)
+		for (int i = 0; i < l2; i++)
+			printf("%d %d %d\n", list[list2[i]].num, list[list2[i]].de, list[list2[i]].cai);
+	if (l3 != 0)
+		for (int i = 0; i < l3; i++)
+			printf("%d %d %d\n", list[list3[i]].num, list[list3[i]].de, list[list3[i]].cai);
+	if (l4 != 0)
+		for (int i = 0; i < l4; i++)
+			printf("%d %d %d\n", list[list4[i]].num, list[list4[i]].de, list[list4[i]].cai);
+
+}
